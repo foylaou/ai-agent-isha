@@ -38,7 +38,7 @@ const spriteStyle = computed(() => {
   return {
     width: `${w}px`,
     height: `${h}px`,
-    backgroundImage: "url('/spritesheet.webp')",
+    backgroundImage: `url('${import.meta.env.BASE_URL}spritesheet.webp')`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: `${w * COLS}px ${h * ROWS}px`,
     backgroundPositionY: `-${cfg.row * h}px`,
