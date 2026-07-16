@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "slidev slides.md",
     "build": "slidev build slides.md",
-    "export": "slidev export slides.md"
+    "build:pages": "slidev build slides.md --base /ai-agent-isha/ --out dist",
+    "export": "slidev export slides.md",
+    "deploy": "pnpm run build:pages && gh-pages -d dist"
   },
   "dependencies": {
     "@slidev/cli": "^51.0.0",
@@ -13,6 +15,7 @@
     "gsap": "^3.12.5"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.0"
+    "@iconify-json/lucide": "^1.2.0",
+    "gh-pages": "^6.3.0"
   }
 }
