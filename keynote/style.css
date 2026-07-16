@@ -1,0 +1,4 @@
+/* Global slide background override (auto-loaded by Slidev from project root) */
+.slidev-layout {
+  background-color: rgb(253, 253, 252);
+}
