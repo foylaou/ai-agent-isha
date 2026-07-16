@@ -7,7 +7,7 @@
     "build": "slidev build slides.md",
     "build:pages": "slidev build slides.md --base /ai-agent-isha/ --out dist",
     "export": "slidev export slides.md",
-    "deploy": "pnpm run build:pages && gh-pages -d dist"
+    "deploy": "pnpm run build:pages && gh-pages -d dist --nojekyll"
   },
   "dependencies": {
     "@slidev/cli": "^52.18.0",
