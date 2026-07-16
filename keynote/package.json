@@ -10,7 +10,7 @@
     "deploy": "pnpm run build:pages && gh-pages -d dist"
   },
   "dependencies": {
-    "@slidev/cli": "^51.0.0",
+    "@slidev/cli": "^52.18.0",
     "@slidev/theme-default": "latest",
     "gsap": "^3.12.5"
   },
