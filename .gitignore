@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+dist/
+.idea/
+*.local
+.env
+.env.*
+keynote/dist/
+keynote/.slidev/
+keynote/components.d.ts
+.claude/settings.local.json
