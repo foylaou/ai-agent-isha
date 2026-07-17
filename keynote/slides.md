@@ -21,6 +21,194 @@ Part 1 上午場：認識 AI｜Part 2 下午場：使用 AI
 layout: default
 ---
 
+# 什麼是「基礎模型」？
+
+<div class="text-sm text-gray-500 mb-2">生成式 AI，不只是語言生成</div>
+
+<div class="flex items-center justify-center gap-3 mt-10">
+  <div class="rounded-2xl border-2 border-blue-300 bg-blue-50 p-4 w-48">
+    <div class="text-blue-700 font-bold text-center mb-3 text-sm">資料（Data）</div>
+    <div class="space-y-1.5">
+      <div class="bg-white rounded-lg border px-3 py-1.5 flex items-center gap-2 text-xs"><lucide-file-text class="w-3.5 h-3.5 text-blue-500 shrink-0" />文字</div>
+      <div class="bg-white rounded-lg border px-3 py-1.5 flex items-center gap-2 text-xs"><lucide-image class="w-3.5 h-3.5 text-blue-500 shrink-0" />圖像</div>
+      <div class="bg-white rounded-lg border px-3 py-1.5 flex items-center gap-2 text-xs"><lucide-mic class="w-3.5 h-3.5 text-blue-500 shrink-0" />語音</div>
+      <div class="bg-white rounded-lg border px-3 py-1.5 flex items-center gap-2 text-xs"><lucide-database class="w-3.5 h-3.5 text-blue-500 shrink-0" />結構化資料</div>
+      <div class="bg-white rounded-lg border px-3 py-1.5 flex items-center gap-2 text-xs"><lucide-box class="w-3.5 h-3.5 text-blue-500 shrink-0" />3D 訊號</div>
+    </div>
+  </div>
+
+  <div class="flex flex-col items-center gap-1">
+    <div class="text-xs font-bold text-gray-500">Training</div>
+    <div class="text-2xl text-gray-400">→</div>
+  </div>
+
+  <div class="rounded-2xl border-2 border-gray-300 bg-white p-5 w-40 flex flex-col items-center text-center">
+    <lucide-layers class="w-9 h-9 text-gray-700 mb-2" />
+    <div class="font-bold text-sm leading-tight">Foundation<br/>Model</div>
+    <div class="text-[10px] text-gray-400 mt-2 leading-snug">同一顆模型<br/>吃各種模態資料</div>
+  </div>
+
+  <div class="flex flex-col items-center gap-1">
+    <div class="text-xs font-bold text-gray-500">Adaptation</div>
+    <div class="text-2xl text-gray-400">→</div>
+  </div>
+
+  <div class="rounded-2xl border-2 border-amber-300 bg-amber-50 p-4 w-52">
+    <div class="text-amber-700 font-bold text-center mb-3 text-sm">任務（Tasks）</div>
+    <div class="space-y-1.5 text-xs">
+      <div class="bg-white rounded-lg border px-3 py-1.5">問答 Question Answering</div>
+      <div class="bg-white rounded-lg border px-3 py-1.5">情感分析 Sentiment Analysis</div>
+      <div class="bg-white rounded-lg border px-3 py-1.5">資訊擷取 Info Extraction</div>
+      <div class="bg-white rounded-lg border px-3 py-1.5">圖像描述 Image Captioning</div>
+      <div class="bg-white rounded-lg border px-3 py-1.5">物件辨識 Object Recognition</div>
+      <div class="bg-white rounded-lg border px-3 py-1.5">指令遵循 Instruction Following</div>
+    </div>
+  </div>
+</div>
+
+---
+layout: default
+---
+
+# 例子一：翻譯模型
+
+<div class="text-sm text-gray-500 mb-2">同一顆模型，adapt 到「翻譯」這個任務</div>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import gsap from 'gsap'
+
+const inBubble = ref()
+const modelBox1 = ref()
+const outEn = ref()
+const outJa = ref()
+const outKo = ref()
+
+onMounted(() => {
+  const outs = [outEn.value, outJa.value, outKo.value]
+  if (!inBubble.value || !modelBox1.value || outs.some(e => !e)) return
+
+  gsap.set(inBubble.value, { opacity: 0, y: 10 })
+  gsap.set(outs, { opacity: 0, x: -10 })
+
+  gsap.timeline({ repeat: -1, repeatDelay: 1 })
+    .to(inBubble.value, { opacity: 1, y: 0, duration: 0.4 })
+    .to(modelBox1.value, { scale: 1.06, duration: 0.25, yoyo: true, repeat: 3 }, '+=0.2')
+    .to(outs, { opacity: 1, x: 0, duration: 0.4, stagger: 0.15 }, '+=0.1')
+    .to({}, { duration: 1.3 })
+    .to([inBubble.value, ...outs], { opacity: 0, duration: 0.3 }, '+=0.2')
+    .set(inBubble.value, { y: 10 })
+    .set(outs, { x: -10 })
+})
+</script>
+
+<div class="flex items-center justify-center gap-6 mt-16">
+  <div ref="inBubble" class="rounded-2xl bg-blue-50 border-2 border-blue-300 px-6 py-5 text-center w-32">
+    <div class="text-xs text-gray-400 mb-1">輸入</div>
+    <div class="text-lg font-bold">你好</div>
+  </div>
+  <div class="text-3xl text-gray-400">→</div>
+  <div ref="modelBox1" class="rounded-2xl bg-white border-2 border-gray-300 px-7 py-6 text-center">
+    <lucide-languages class="w-8 h-8 mx-auto mb-2 text-gray-700" />
+    <div class="font-bold text-sm">翻譯模型</div>
+  </div>
+  <div class="text-3xl text-gray-400">→</div>
+  <div class="flex flex-col gap-3">
+    <div ref="outEn" class="rounded-xl bg-emerald-50 border-2 border-emerald-300 px-4 py-2 flex items-center gap-3 text-sm">
+      <span class="text-[10px] font-bold text-emerald-600 w-6">EN</span><span class="font-bold">Hello</span>
+    </div>
+    <div ref="outJa" class="rounded-xl bg-emerald-50 border-2 border-emerald-300 px-4 py-2 flex items-center gap-3 text-sm">
+      <span class="text-[10px] font-bold text-emerald-600 w-6">JA</span><span class="font-bold">こんにちは</span>
+    </div>
+    <div ref="outKo" class="rounded-xl bg-emerald-50 border-2 border-emerald-300 px-4 py-2 flex items-center gap-3 text-sm">
+      <span class="text-[10px] font-bold text-emerald-600 w-6">KO</span><span class="font-bold">안녕하세요</span>
+    </div>
+  </div>
+</div>
+
+<div class="text-center text-sm text-gray-500 mt-10">同一句輸入，adapt 到不同語言的輸出——這就是「任務調適」</div>
+
+---
+layout: default
+---
+
+# 例子二：文字生成影像
+
+<div class="text-sm text-gray-500 mb-2">同一種能力，adapt 到「生成圖像」這個任務</div>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import gsap from 'gsap'
+
+const promptCard = ref()
+const modelBox2 = ref()
+const spinner = ref()
+const resultImg = ref()
+
+onMounted(() => {
+  if (!promptCard.value || !modelBox2.value || !spinner.value || !resultImg.value) return
+
+  gsap.set(promptCard.value, { opacity: 0, y: 10 })
+  gsap.set(spinner.value, { opacity: 0 })
+  gsap.set(resultImg.value, { opacity: 0 })
+
+  gsap.timeline({ repeat: -1, repeatDelay: 1 })
+    .to(promptCard.value, { opacity: 1, y: 0, duration: 0.4 })
+    .to(modelBox2.value, { scale: 1.06, duration: 0.25, yoyo: true, repeat: 3 }, '+=0.2')
+    .to(spinner.value, { opacity: 1, duration: 0.3 }, '+=0.1')
+    .to({}, { duration: 1.2 })
+    .to(spinner.value, { opacity: 0, duration: 0.3 })
+    .to(resultImg.value, { opacity: 1, duration: 0.5 }, '<')
+    .to({}, { duration: 1.4 })
+    .to([promptCard.value, resultImg.value], { opacity: 0, duration: 0.3 }, '+=0.2')
+    .set(promptCard.value, { y: 10 })
+    .set(spinner.value, { opacity: 0 })
+})
+</script>
+
+<div class="flex items-center justify-center gap-6 mt-14">
+  <div ref="promptCard" class="rounded-2xl bg-blue-50 border-2 border-blue-300 px-5 py-4 w-56 text-sm leading-snug">
+    <div class="text-xs text-gray-400 mb-1">Prompt</div>
+    給我一隻布偶貓，躺在沙發上慵懶睡覺的樣子
+  </div>
+  <div class="text-3xl text-gray-400">→</div>
+  <div ref="modelBox2" class="rounded-2xl bg-white border-2 border-gray-300 px-6 py-6 text-center">
+    <lucide-image class="w-8 h-8 mx-auto mb-2 text-gray-700" />
+    <div class="font-bold text-sm">文字生成影像模型</div>
+    <div class="text-[10px] text-gray-400 mt-1">Stable Diffusion／Nano Banana</div>
+  </div>
+  <div class="text-3xl text-gray-400">→</div>
+  <div class="relative w-36 h-36 rounded-2xl border-2 border-amber-300 bg-amber-50 flex items-center justify-center overflow-hidden">
+    <div ref="spinner" class="loading-spinner"></div>
+    <img ref="resultImg" src="/cat.jpeg" class="absolute inset-0 w-full h-full object-cover" />
+  </div>
+</div>
+
+<div class="text-center text-sm text-gray-500 mt-10">
+輸入變成一句「文字描述」、輸出變成一張「圖片」——模型沒換，換的是任務
+</div>
+<div class="text-center text-xs text-gray-400 italic mt-3">
+→ 後面會看到：Agent 也是同一顆基礎模型，被 adapt 成「任務規劃」的能力
+</div>
+
+<style>
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 4px solid #fcd34d;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+
+---
+layout: default
+---
+
 # 生成式 AI 概論
 
 <div class="text-sm text-gray-500 mb-2">從一篇論文，到全民都在用</div>
@@ -356,20 +544,51 @@ layout: default
 
 # 什麼是提示工程？
 
-<div class="grid grid-cols-2 gap-6 mt-10">
-  <div class="rounded-2xl border-2 p-5">
-    <div class="font-bold text-gray-500 mb-3 text-center flex items-center justify-center gap-1"><lucide-x class="w-4 h-4" /> 模糊的提示</div>
-    <div class="rounded-lg bg-gray-50 border p-3 text-sm text-gray-600">「幫我看這張請假單」</div>
-    <div class="text-xs text-gray-400 mt-3 text-center">沒有角色、沒有格式、沒有範例——每次結果都不一樣</div>
+<script setup>
+import { ref, onMounted } from 'vue'
+import gsap from 'gsap'
+
+const resultVague = ref()
+const resultGood = ref()
+
+onMounted(() => {
+  if (!resultVague.value || !resultGood.value) return
+  gsap.set([resultVague.value, resultGood.value], { opacity: 0, y: 8 })
+
+  gsap.timeline({ repeat: -1, repeatDelay: 0.8 })
+    .to({}, { duration: 0.6 })
+    .to([resultVague.value, resultGood.value], { opacity: 1, y: 0, duration: 0.4, stagger: 0.15 })
+    .to({}, { duration: 1.8 })
+    .to([resultVague.value, resultGood.value], { opacity: 0, y: 8, duration: 0.3 }, '+=0.2')
+})
+</script>
+
+<div class="grid grid-cols-2 gap-6 mt-6">
+  <div class="rounded-2xl border-2 p-4">
+    <div class="font-bold text-gray-500 mb-2 text-center flex items-center justify-center gap-1"><lucide-x class="w-4 h-4" /> 模糊的提示</div>
+    <div class="rounded-lg bg-gray-50 border p-2 text-xs text-gray-600">「幫我看這張請假單」</div>
+    <div class="text-[10px] text-gray-400 mt-2 text-center">沒有角色、沒有格式、沒有範例——每次結果都不一樣</div>
+    <div class="flex justify-center my-2 text-lg text-gray-300">↓</div>
+    <div ref="resultVague" class="rounded-lg bg-red-50 border border-red-200 p-2 text-[10px] text-gray-600 leading-relaxed">
+      「這張單子好像是請假申請，日期不太確定，原因大概跟手術有關，實際天數請再確認……」
+    </div>
+    <div class="text-[10px] text-red-500 mt-2 text-center">自然語言、格式不固定——程式難以直接接續處理</div>
   </div>
-  <div class="rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-5">
-    <div class="font-bold text-emerald-700 mb-3 text-center flex items-center justify-center gap-1"><lucide-check class="w-4 h-4" /> 結構化的提示</div>
-    <div class="rounded-lg bg-white border p-3 text-xs text-gray-600 leading-relaxed">
+  <div class="rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-4">
+    <div class="font-bold text-emerald-700 mb-2 text-center flex items-center justify-center gap-1"><lucide-check class="w-4 h-4" /> 結構化的提示</div>
+    <div class="rounded-lg bg-white border p-2 text-[10px] text-gray-600 leading-relaxed">
       你是人事助理。請從這張請假單擷取：<br/>
       姓名、請假日期、原因、天數<br/>
       並以 JSON 格式輸出，欄位缺漏請填 null
     </div>
-    <div class="text-xs text-emerald-600 mt-3 text-center">給角色、給格式、給規則——結果穩定可預期</div>
+    <div class="text-[10px] text-emerald-600 mt-2 text-center">給角色、給格式、給規則——結果穩定可預期</div>
+    <div class="flex justify-center my-2 text-lg text-emerald-300">↓</div>
+    <pre ref="resultGood" class="rounded-lg bg-white border p-2 text-[9px] font-mono leading-snug whitespace-pre-wrap">{
+  "姓名": "小明",
+  "請假日期": "114/07/30 - 114/08/05",
+  "原因": "車禍手術",
+  "天數": 7
+}</pre>
   </div>
 </div>
 
@@ -424,6 +643,94 @@ layout: default
 layout: default
 ---
 
+# 生成式 AI，也很會寫程式
+
+<div class="text-sm text-gray-500 mb-2">訓練資料裡有大量程式碼——這也是一種「任務」</div>
+
+<div class="grid grid-cols-3 gap-6 mt-10">
+  <div class="rounded-2xl border-2 p-6 text-center">
+    <lucide-code class="w-8 h-8 mx-auto mb-3 text-blue-500" />
+    <div class="font-bold mb-2">會寫多種語言</div>
+    <div class="text-xs text-gray-500">Python、JavaScript、Shell…能讀也能寫</div>
+  </div>
+  <div class="rounded-2xl border-2 p-6 text-center">
+    <lucide-terminal class="w-8 h-8 mx-auto mb-3 text-emerald-500" />
+    <div class="font-bold mb-2">能在電腦上執行</div>
+    <div class="text-xs text-gray-500">搭配 code execution／computer use，寫完就能直接跑</div>
+  </div>
+  <div class="rounded-2xl border-2 p-6 text-center">
+    <lucide-settings class="w-8 h-8 mx-auto mb-3 text-amber-500" />
+    <div class="font-bold mb-2">依環境調整寫法</div>
+    <div class="text-xs text-gray-500">看使用者裝了什麼工具，動態選擇對應的程式庫</div>
+  </div>
+</div>
+
+<div class="text-center text-sm text-gray-500 mt-10">Skill 不只是「文字指令」，也可以是「教 AI 怎麼寫程式解決這個任務」</div>
+
+---
+layout: default
+---
+
+# Skill 檔案長什麼樣子？
+
+<div class="text-sm text-gray-500 mb-3">一個 Skill，就是一個有名字、有說明、有步驟的檔案（SKILL.md）</div>
+
+<div class="text-sm">
+
+```markdown
+---
+name: your-skill-name              # Skill 的名字
+description: 這個 Skill 是做什麼的、什麼情況該使用它
+---
+# 你的 Skill 名稱
+
+## Instructions（操作步驟）
+[給 Claude 清楚、一步一步的操作說明]
+
+## Examples（範例）
+[具體示範這個 Skill 怎麼被使用]
+```
+
+</div>
+
+<div class="text-center text-sm text-gray-500 mt-4">name／description 讓 AI 知道「什麼時候該用」，Instructions／Examples 教它「怎麼用」</div>
+
+---
+layout: default
+---
+
+# 範例：文件生成 Skill
+
+<div class="text-sm text-gray-500 mb-3">在 open computer 環境下，Skill 可以「現場寫程式」因應使用者的環境</div>
+
+<div class="text-sm">
+
+```markdown
+---
+name: generate-document
+description: 根據使用者提供的內容與所在環境，動態產生格式化文件（Word／PDF／Markdown）
+---
+# 文件生成 Skill
+
+## Instructions
+1. 確認使用者要的檔案格式與內容
+2. 檢查目前電腦環境裝了哪些工具／函式庫
+3. 撰寫並執行對應的程式碼，產生檔案
+4. 回傳檔案路徑，讓使用者可以直接開啟
+
+## Examples
+使用者：「幫我把這份會議記錄整理成 Word 文件」
+→ 判斷環境已有 python-docx，寫程式產生 .docx 並回傳
+```
+
+</div>
+
+<div class="text-center text-sm text-gray-500 mt-4">同一個 Skill，換一台電腦環境不同，寫出來的程式也會不一樣——這正是本課程兩個實做的基礎</div>
+
+---
+layout: default
+---
+
 # 接下來的兩個實做，都是文件生成的 Skill
 
 <div class="grid grid-cols-2 gap-8 mt-12">
@@ -472,24 +779,83 @@ layout: default
 
 # 這堂課用到的多模態：OCR
 
-<div class="flex items-center justify-center gap-6 mt-16">
-  <div class="rounded-2xl border-2 p-6 text-center w-40">
-    <lucide-image class="w-8 h-8 mx-auto mb-2 text-gray-400" />
-    <div class="text-xs font-bold">PDF／PNG<br/>請假單</div>
+<script setup>
+import { ref, onMounted } from 'vue'
+import gsap from 'gsap'
+
+const ocrBox = ref()
+const resultPanel = ref()
+const jsonBlock = ref()
+const xmlBlock = ref()
+const format = ref('json')
+
+onMounted(() => {
+  if (!ocrBox.value || !resultPanel.value || !jsonBlock.value || !xmlBlock.value) return
+
+  gsap.set(resultPanel.value, { opacity: 0, y: 8 })
+  gsap.set(jsonBlock.value, { opacity: 1 })
+  gsap.set(xmlBlock.value, { opacity: 0 })
+
+  const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.6 })
+  tl.to(ocrBox.value, { scale: 1.08, duration: 0.3, yoyo: true, repeat: 3 })
+  tl.call(() => format.value = 'json')
+  tl.to(resultPanel.value, { opacity: 1, y: 0, duration: 0.4 })
+  tl.to({}, { duration: 1.4 })
+  tl.call(() => format.value = 'xml')
+  tl.to(jsonBlock.value, { opacity: 0, duration: 0.3 })
+  tl.to(xmlBlock.value, { opacity: 1, duration: 0.3 }, '<')
+  tl.to({}, { duration: 1.4 })
+  tl.to(resultPanel.value, { opacity: 0, y: 8, duration: 0.3 }, '+=0.2')
+  tl.set(jsonBlock.value, { opacity: 1 })
+  tl.set(xmlBlock.value, { opacity: 0 })
+})
+</script>
+
+<div class="flex items-center justify-center gap-6 mt-10">
+  <div class="rounded-2xl border-2 p-2 text-center w-36">
+    <img src="/請假.png" class="w-full rounded-lg border" />
+    <div class="text-xs font-bold mt-2">請假單掃描檔</div>
   </div>
   <div class="text-2xl text-gray-400">→</div>
-  <div class="rounded-2xl border-2 border-amber-300 bg-amber-50 px-6 py-6 text-center">
+  <div ref="ocrBox" class="rounded-2xl border-2 border-amber-300 bg-amber-50 px-6 py-6 text-center">
     <lucide-scan class="w-8 h-8 mx-auto mb-2 text-amber-600" />
     <div class="text-sm font-bold text-amber-700">OCR</div>
   </div>
   <div class="text-2xl text-gray-400">→</div>
-  <div class="rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-6 text-center w-40">
-    <lucide-file-text class="w-8 h-8 mx-auto mb-2 text-emerald-600" />
-    <div class="text-xs font-bold text-emerald-700">純文字內容</div>
+  <div ref="resultPanel" class="rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-3 w-72">
+    <div class="flex justify-center gap-2 mb-2 text-[10px] font-bold">
+      <span :class="format === 'json' ? 'text-emerald-700' : 'text-gray-300'">JSON</span>
+      <span class="text-gray-300">/</span>
+      <span :class="format === 'xml' ? 'text-emerald-700' : 'text-gray-300'">XML</span>
+    </div>
+    <div class="relative" style="height: 168px;">
+      <pre ref="jsonBlock" class="absolute inset-0 text-[9px] leading-snug bg-white rounded-lg border p-2 overflow-hidden font-mono whitespace-pre-wrap">{
+  "姓名": "小明",
+  "部門": "IT",
+  "職位": "前端工程師",
+  "日期": "7/30",
+  "請假類型": "病假",
+  "請假時間": {
+    "起": "114/07/30",
+    "迄": "114/08/05",
+    "共": "7 天"
+  },
+  "請假原因": "車禍手術"
+}</pre>
+      <pre ref="xmlBlock" class="absolute inset-0 text-[9px] leading-snug bg-white rounded-lg border p-2 overflow-hidden font-mono whitespace-pre-wrap">&lt;請假單&gt;
+  &lt;姓名&gt;小明&lt;/姓名&gt;
+  &lt;部門&gt;IT&lt;/部門&gt;
+  &lt;職位&gt;前端工程師&lt;/職位&gt;
+  &lt;日期&gt;7/30&lt;/日期&gt;
+  &lt;請假類型&gt;病假&lt;/請假類型&gt;
+  &lt;請假時間 起="114/07/30" 迄="114/08/05" 共="7天" /&gt;
+  &lt;請假原因&gt;車禍手術&lt;/請假原因&gt;
+&lt;/請假單&gt;</pre>
+    </div>
   </div>
 </div>
 
-<div class="text-center text-sm text-gray-500 mt-10">圖片轉成文字，語言模型才能繼續處理——後面「請假代理人」實做會用到</div>
+<div class="text-center text-sm text-gray-500 mt-8">圖片轉成結構化資料，語言模型才能繼續處理——後面「請假代理人」實做會用到</div>
 
 ---
 layout: default
@@ -497,8 +863,41 @@ layout: default
 
 # 什麼是 MCP？
 
-<div class="text-center text-base mt-6 mb-8">
+<script setup>
+import { ref, onMounted } from 'vue'
+import gsap from 'gsap'
+
+const examples = [
+  { label: '資料庫', query: '幫我看資料庫裡面 112 年是否有 XXX 稽核資料？' },
+  { label: '行事曆', query: '幫我確認 12 號是否有空，我想在上午 10 點安排會議' },
+  { label: '文件', query: '幫我確認公司請假規則' },
+  { label: '外部 API（搜尋）', query: '幫我查查最近跟食安有關的新聞' },
+]
+
+const activeIdx = ref(0)
+const queryBubble = ref()
+
+onMounted(() => {
+  if (!queryBubble.value) return
+  gsap.set(queryBubble.value, { opacity: 0, y: -8 })
+
+  const tl = gsap.timeline({ repeat: -1 })
+  examples.forEach((_, i) => {
+    tl.call(() => activeIdx.value = i)
+    tl.to(queryBubble.value, { opacity: 1, y: 0, duration: 0.4 })
+    tl.to({}, { duration: 1.6 })
+    tl.to(queryBubble.value, { opacity: 0, y: -8, duration: 0.3 }, '+=0.2')
+    tl.to({}, { duration: 0.2 })
+  })
+})
+</script>
+
+<div class="text-center text-base mt-4 mb-4">
   <b class="text-blue-600">Model Context Protocol</b>——讓 AI 模型跟外部工具、資料溝通的標準協定
+</div>
+
+<div ref="queryBubble" class="mx-auto mb-5 max-w-lg rounded-xl bg-white border-2 border-blue-300 px-4 py-2 text-center text-sm">
+  {{ examples[activeIdx].query }}
 </div>
 
 <div class="flex items-center justify-center gap-6">
@@ -508,14 +907,22 @@ layout: default
     <div class="text-2xl text-gray-300">⇄</div>
   </div>
   <div class="grid grid-cols-2 gap-3">
-    <div class="rounded-xl border p-3 text-center text-xs flex flex-col items-center gap-1"><lucide-database class="w-5 h-5 text-gray-400" />資料庫</div>
-    <div class="rounded-xl border p-3 text-center text-xs flex flex-col items-center gap-1"><lucide-calendar class="w-5 h-5 text-gray-400" />行事曆</div>
-    <div class="rounded-xl border p-3 text-center text-xs flex flex-col items-center gap-1"><lucide-file-text class="w-5 h-5 text-gray-400" />文件</div>
-    <div class="rounded-xl border p-3 text-center text-xs flex flex-col items-center gap-1"><lucide-globe class="w-5 h-5 text-gray-400" />外部 API</div>
+    <div class="rounded-xl border-2 p-3 text-center text-xs flex flex-col items-center gap-1 transition-all duration-300" :class="activeIdx === 0 ? 'border-blue-400 bg-blue-50 scale-105' : 'border-gray-200 bg-white opacity-60'">
+      <lucide-database class="w-5 h-5" :class="activeIdx === 0 ? 'text-blue-500' : 'text-gray-400'" />資料庫
+    </div>
+    <div class="rounded-xl border-2 p-3 text-center text-xs flex flex-col items-center gap-1 transition-all duration-300" :class="activeIdx === 1 ? 'border-blue-400 bg-blue-50 scale-105' : 'border-gray-200 bg-white opacity-60'">
+      <lucide-calendar class="w-5 h-5" :class="activeIdx === 1 ? 'text-blue-500' : 'text-gray-400'" />行事曆
+    </div>
+    <div class="rounded-xl border-2 p-3 text-center text-xs flex flex-col items-center gap-1 transition-all duration-300" :class="activeIdx === 2 ? 'border-blue-400 bg-blue-50 scale-105' : 'border-gray-200 bg-white opacity-60'">
+      <lucide-file-text class="w-5 h-5" :class="activeIdx === 2 ? 'text-blue-500' : 'text-gray-400'" />文件
+    </div>
+    <div class="rounded-xl border-2 p-3 text-center text-xs flex flex-col items-center gap-1 transition-all duration-300" :class="activeIdx === 3 ? 'border-blue-400 bg-blue-50 scale-105' : 'border-gray-200 bg-white opacity-60'">
+      <lucide-globe class="w-5 h-5" :class="activeIdx === 3 ? 'text-blue-500' : 'text-gray-400'" />外部 API
+    </div>
   </div>
 </div>
 
-<div class="text-center text-sm text-gray-500 mt-10">常見比喻：<b>USB-C for AI</b>——不用每個工具都做一個專屬接頭</div>
+<div class="text-center text-sm text-gray-500 mt-8">常見比喻：<b>USB-C for AI</b>——不用每個工具都做一個專屬接頭</div>
 
 ---
 layout: default
