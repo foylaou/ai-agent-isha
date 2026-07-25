@@ -4,6 +4,7 @@
 這份骨架已經幫你接好：
 - 一個本機工具 load_file_as_base64（讀本機檔案、轉成 base64，MCP 工具要吃這個格式）
 - 遠端 MCP 工具 read_document（講師部署，讀 DOCX／文字檔）
+- 透過講師部署的 LiteLLM Proxy 呼叫模型（統一管理 API Key、記錄呼叫）
 
 你的任務只有一個：把下面 instruction 的 TODO 部分描述清楚，
 讓 Agent 知道怎麼把會議內容整理成正式的會議通知。
@@ -14,17 +15,31 @@
 
 import base64
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 from google.adk.agents import Agent
+from google.adk.models.lite_llm import LiteLlm
 from google.adk.tools.mcp_tool.mcp_session_manager import (
     StreamableHTTPConnectionParams,
 )
 from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
 
-load_dotenv()
+# .env 放在 code-sample/ 底下，兩個 lab 共用（LiteLLM 的 key、MCP 位址）
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 MCP_SERVER_URL = os.environ["MCP_SERVER_URL"]  # 例如 http://<講師給的位址>:8000/mcp
+
+# 生成會議通知要組織語言、掌握語境，用中大型模型（見投影片「以文件生成
+# 為例：該選哪一種？」）。想比較地端模型的話，在 .env 加一行
+# MODEL_NAME=gemma4:26b 覆蓋這個預設值即可。
+MODEL_NAME = os.environ.get("MODEL_NAME", "claude-sonnet-4-6")
+
+model = LiteLlm(
+    model=f"openai/{MODEL_NAME}",
+    api_base=os.environ["LITELLM_API_BASE"],
+    api_key=os.environ["LITELLM_API_KEY"],
+)
 
 
 def load_file_as_base64(path: str) -> str:
@@ -59,7 +74,7 @@ TODO: 描述會議秘書該做的事情。
 
 root_agent = Agent(
     name="meeting_secretary",
-    model="gemini-2.5-flash",
+    model=model,
     instruction=INSTRUCTION,
     tools=[load_file_as_base64, workshop_tools],
 )

@@ -1,2 +1,4 @@
-google-adk>=1.0.0
+# [extensions] 拉 LiteLlm 支援，且 ADK 已把 litellm 釘在 >=1.84，
+# 避開 2026-03 那次 litellm 1.82.7/1.82.8 的供應鏈攻擊版本
+google-adk[extensions]>=1.0.0
 python-dotenv>=1.0.1

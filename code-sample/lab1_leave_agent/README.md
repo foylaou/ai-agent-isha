@@ -7,6 +7,8 @@
 
 - 本機工具 `load_file_as_base64`：讀本機檔案轉 base64
 - 已經接好講師部署的遠端 MCP 工具：`ocr_image`、`read_document`
+- 已經接好講師部署的 LiteLLM Proxy（預設用地端小模型 `gemma4:26b`，
+  這個任務欄位固定、夠簡單，不需要大模型）
 - `skills/leave-agent.SKILL.md`：完整規格（欄位、輸出格式、範例）
 
 ## 你要做的事
@@ -17,13 +19,15 @@
 
 ## 設定與執行
 
-```bash
-cd lab1_leave_agent
-pip install -r requirements.txt
-cp .env.example .env
-# 編輯 .env：填入 GOOGLE_API_KEY，MCP_SERVER_URL 用講師當天公布的位址
+在 `code-sample/` 底下（跟這個資料夾同一層）：
 
-cd ..
+```bash
+pip install -r lab1_leave_agent/requirements.txt
+
+# 如果還沒設定過共用的 .env（見上層 README「事前準備」）：
+cp .env.example .env
+# 編輯 .env：LITELLM_API_BASE／LITELLM_API_KEY／MCP_SERVER_URL 用講師當天公布的值
+
 adk web .
 ```
 
@@ -43,3 +47,5 @@ adk web .
 
 - 讓 Agent 在欄位缺漏時主動反問使用者，而不是直接留 `null`
 - 支援一次處理多張請假單，回傳 JSON 陣列
+- 在 `.env` 加 `MODEL_NAME=claude-sonnet-4-6`，跟預設的地端小模型比較
+  結果品質與速度差異

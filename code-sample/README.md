@@ -7,26 +7,34 @@
 ## 架構
 
 ```
-講師端：mcp-server/（Docker，已部署好，當天給你網址）
-  ├─ ocr_image      對圖片／PDF 掃描檔做 OCR
-  └─ read_document   讀 DOCX／文字檔內容
+講師端：
+  mcp-server/（Docker，已部署好，當天給你網址）
+    ├─ ocr_image      對圖片／PDF 掃描檔做 OCR
+    └─ read_document   讀 DOCX／文字檔內容
+  LiteLLM Proxy（統一管理 API Key、記錄每次呼叫、控管模型存取，當天給你網址）
+    ├─ claude-sonnet-4-6  雲端、中大型
+    └─ gemma4:26b         地端、小型
 
 你要寫的：
-  lab1_leave_agent/       請假代理人：擷取請假單人事時地物
-  lab2_meeting_secretary/ 會議秘書：開會內容 → 生成會議通知
+  lab1_leave_agent/       請假代理人：擷取請假單人事時地物（預設用 gemma4:26b）
+  lab2_meeting_secretary/ 會議秘書：開會內容 → 生成會議通知（預設用 claude-sonnet-4-6）
 ```
 
-兩個實做的 `agent.py` 都已經把 MCP 工具接好了，唯一要做的是把
-`INSTRUCTION` 裡的 TODO 描述清楚——這就是「Skill」：把一次性的 prompt
-變成有名字、有規則、可重複呼叫的東西（詳見簡報「從 Prompt 到 Skill」）。
+兩個實做的 `agent.py` 都已經把 MCP 工具、LiteLLM 模型接好了，唯一要做的
+是把 `INSTRUCTION` 裡的 TODO 描述清楚——這就是「Skill」：把一次性的
+prompt 變成有名字、有規則、可重複呼叫的東西（詳見簡報「從 Prompt 到
+Skill」）。兩個 lab 預設用不同模型，剛好對應簡報「以文件生成為例：
+該選哪一種？」的選型邏輯：欄位固定的簡單任務用地端小模型，需要組織
+語言的任務用中大型模型。
 
 ## 事前準備
 
 1. Python 3.10+
 2. VS Code（建議用本機版，不要用線上版，才能跟 AI 編輯器整合順暢）
-3. `pip install google-adk`
-4. 一組 [Gemini API Key](https://aistudio.google.com/apikey)
-5. 講師當天公布的 MCP server 網址
+3. `pip install "google-adk[extensions]"`
+4. 在 `code-sample/`（跟這份 README 同一層）執行 `cp .env.example .env`，
+   填入講師當天公布的 `LITELLM_API_BASE`、`LITELLM_API_KEY`、
+   `MCP_SERVER_URL`（兩個 lab 共用同一份 `.env`）
 
 ## 資料夾
 

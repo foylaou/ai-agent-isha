@@ -7,6 +7,8 @@
 
 - 本機工具 `load_file_as_base64`：讀本機檔案轉 base64
 - 已經接好講師部署的遠端 MCP 工具：`read_document`
+- 已經接好講師部署的 LiteLLM Proxy（預設用中大型模型
+  `claude-sonnet-4-6`，這個任務要組織語言、掌握語境，需要能力較強的模型）
 - `skills/meeting-secretary.SKILL.md`：完整規格（欄位、輸出格式、範例）
 
 ## 你要做的事
@@ -17,13 +19,15 @@
 
 ## 設定與執行
 
-```bash
-cd lab2_meeting_secretary
-pip install -r requirements.txt
-cp .env.example .env
-# 編輯 .env：填入 GOOGLE_API_KEY，MCP_SERVER_URL 用講師當天公布的位址
+在 `code-sample/` 底下（跟這個資料夾同一層）：
 
-cd ..
+```bash
+pip install -r lab2_meeting_secretary/requirements.txt
+
+# 如果還沒設定過共用的 .env（見上層 README「事前準備」）：
+cp .env.example .env
+# 編輯 .env：LITELLM_API_BASE／LITELLM_API_KEY／MCP_SERVER_URL 用講師當天公布的值
+
 adk web .
 ```
 
