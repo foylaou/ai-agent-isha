@@ -35,9 +35,15 @@ MCP_SERVER_URL = os.environ["MCP_SERVER_URL"]  # 例如 http://<講師給的位�
 # MODEL_NAME=claude-sonnet-4-6 覆蓋這個預設值即可。
 MODEL_NAME = os.environ.get("MODEL_NAME", "gemma4:26b")
 
+# LiteLLM 走 openai-compatible 路徑時，base URL 一定要含 /v1（openai SDK
+# 不會自己補），這裡自動補上，不用依賴 .env 填得剛好對
+LITELLM_API_BASE = os.environ["LITELLM_API_BASE"].rstrip("/")
+if not LITELLM_API_BASE.endswith("/v1"):
+    LITELLM_API_BASE += "/v1"
+
 model = LiteLlm(
-    model=f"litellm_proxy/{MODEL_NAME}",
-    api_base=os.environ["LITELLM_API_BASE"],
+    model=f"openai/{MODEL_NAME}",
+    api_base=LITELLM_API_BASE,
     api_key=os.environ["LITELLM_API_KEY"],
 )
 

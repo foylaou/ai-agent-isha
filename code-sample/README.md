@@ -44,10 +44,10 @@ Skill」）。兩個 lab 預設用不同模型，剛好對應簡報「以文件�
   certificate chain`**：公司電腦上常見——作業系統信任公司根憑證，但
   Python 預設看不到系統憑證庫。`requirements.txt` 已經有
   `pip-system-certs` 幫你修，裝好重跑就好，不用改程式碼。
-- **LiteLLM 呼叫回 `405 Method Not Allowed`**：`agent.py` 裡 model 要用
-  `litellm_proxy/<模型名稱>` 這個 provider 前綴呼叫自己架的 LiteLLM
-  Proxy，不能用 `openai/`——這份骨架已經是正確的，如果你自己改過
-  `model=` 那行要改回來。
+- **LiteLLM 呼叫回 `405 Method Not Allowed`**：`api_base` 少了 `/v1`
+  ——openai SDK 不會自己補這段路徑。這份骨架已經會自動幫 `.env` 裡的
+  `LITELLM_API_BASE` 補上 `/v1`，如果你自己改過 `agent.py` 那幾行要
+  改回來。
 
 ## 資料夾
 
