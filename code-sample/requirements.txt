@@ -1,4 +1,6 @@
-# [extensions] 拉 LiteLlm 支援，且 ADK 已把 litellm 釘在 >=1.84，
-# 避開 2026-03 那次 litellm 1.82.7/1.82.8 的供應鏈攻擊版本
-google-adk[extensions]>=1.0.0
+# [extensions] 拉 LiteLlm 支援，[mcp] 拉 MCPToolset 需要的 mcp 套件
+# （這兩個是分開的 extra，缺一個 adk web 就會 ModuleNotFoundError）
+# ADK 已把 litellm 釘在 >=1.84，避開 2026-03 那次 litellm 1.82.7/1.82.8
+# 的供應鏈攻擊版本
+google-adk[extensions,mcp]>=1.0.0
 python-dotenv>=1.0.1
