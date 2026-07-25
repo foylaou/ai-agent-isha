@@ -31,10 +31,23 @@ Skill」）。兩個 lab 預設用不同模型，剛好對應簡報「以文件�
 
 1. Python 3.10+
 2. VS Code（建議用本機版，不要用線上版，才能跟 AI 編輯器整合順暢）
-3. `pip install "google-adk[extensions]"`
+3. `pip install -r requirements.txt`
 4. 在 `code-sample/`（跟這份 README 同一層）執行 `cp .env.example .env`，
    填入講師當天公布的 `LITELLM_API_BASE`、`LITELLM_API_KEY`、
    `MCP_SERVER_URL`（兩個 lab 共用同一份 `.env`）
+
+## 常見錯誤
+
+- **`ModuleNotFoundError: No module named 'mcp'`**：`requirements.txt`
+  沒裝全，重新 `pip install -r requirements.txt`。
+- **`[SSL: CERTIFICATE_VERIFY_FAILED] self-signed certificate in
+  certificate chain`**：公司電腦上常見——作業系統信任公司根憑證，但
+  Python 預設看不到系統憑證庫。`requirements.txt` 已經有
+  `pip-system-certs` 幫你修，裝好重跑就好，不用改程式碼。
+- **LiteLLM 呼叫回 `405 Method Not Allowed`**：`agent.py` 裡 model 要用
+  `litellm_proxy/<模型名稱>` 這個 provider 前綴呼叫自己架的 LiteLLM
+  Proxy，不能用 `openai/`——這份骨架已經是正確的，如果你自己改過
+  `model=` 那行要改回來。
 
 ## 資料夾
 

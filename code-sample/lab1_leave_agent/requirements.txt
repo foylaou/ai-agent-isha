@@ -4,3 +4,8 @@
 # 的供應鏈攻擊版本
 google-adk[extensions,mcp]>=1.0.0
 python-dotenv>=1.0.1
+
+# 公司內部根憑證簽的 HTTPS：作業系統憑證庫信任，但 Python ssl/httpx 預設
+# 看不到，會噴 "self-signed certificate in certificate chain"。裝了自動
+# 改用系統憑證庫驗證。
+pip-system-certs>=4.0

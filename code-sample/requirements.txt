@@ -4,3 +4,10 @@
 # 的供應鏈攻擊版本
 google-adk[extensions,mcp]>=1.0.0
 python-dotenv>=1.0.1
+
+# 公司電腦上 MCP／LiteLLM 若是走公司內部根憑證簽的 HTTPS，作業系統的
+# 憑證庫（Keychain／CryptoAPI）雖然信任它，但 Python 的 ssl／httpx 預設只認
+# certifi 內建的公開憑證清單，看不到系統憑證庫，所以會噴
+# "self-signed certificate in certificate chain"。這個套件裝了就會自動
+# 改用系統憑證庫驗證，不用改任何程式碼。
+pip-system-certs>=4.0

@@ -36,7 +36,7 @@ MCP_SERVER_URL = os.environ["MCP_SERVER_URL"]  # 例如 http://<講師給的位�
 MODEL_NAME = os.environ.get("MODEL_NAME", "gemma4:26b")
 
 model = LiteLlm(
-    model=f"openai/{MODEL_NAME}",
+    model=f"litellm_proxy/{MODEL_NAME}",
     api_base=os.environ["LITELLM_API_BASE"],
     api_key=os.environ["LITELLM_API_KEY"],
 )
