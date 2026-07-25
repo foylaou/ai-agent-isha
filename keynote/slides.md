@@ -18,6 +18,15 @@ Part 1 上午場：認識 AI｜Part 2 下午場：使用 AI
 </div>
 
 ---
+layout: center
+class: text-center
+---
+
+# 1. 生成式 AI 概論
+
+<div class="text-sm opacity-60 mt-4">從一篇論文，到全民都在用</div>
+
+---
 layout: default
 ---
 
