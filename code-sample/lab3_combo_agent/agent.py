@@ -117,7 +117,9 @@ leave_step = Agent(
 #   2. 誰負責交接、會議時間地點——這些 {leave_info} 沒有的資訊要反問
 #      使用者，不可以自己編造
 #   3. 輸出格式比照 ../skills/meeting-secretary.SKILL.md 的會議通知格式，
-#      但主題要是「{姓名} 請假交接會議」
+#      但主題要是「<姓名> 請假交接會議」（注意：instruction 裡示意用的
+#      空格要用 <角括號>，不要用 {花括號}——ADK 會把 {word} 當成 session
+#      state 變數去查，查不到會直接 KeyError）
 MEETING_STEP_INSTRUCTION = """
 TODO: 根據 {leave_info} 生成一份請假交接會議通知。
 """
