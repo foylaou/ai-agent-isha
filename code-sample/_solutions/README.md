@@ -34,12 +34,25 @@ adk web _solutions
 預期輸出一份包含時間 7/30 14:00–15:00、地點 3 樓會議室、
 與會人員小明、小華的會議通知。
 
-## 兩邊都能正常跑，代表：
+選 `leave_to_meeting_combo_solution`，測：
+
+```
+幫我處理 ../lab1_leave_agent/sample_data/請假單-範例.png
+```
+
+Step 1 跑完會自動接著跑 Step 2，Step 2 應該會反問交接窗口、會議時間
+地點；回答後（例如「交接窗口是小華，會議約 7/29 下午 3 點，在 3 樓
+會議室」）應該會得到一份包含請假期間、原因的交接會議通知。
+
+## 三個都能正常跑，代表：
 
 - MCP server 的 `ocr_image`／`read_document` 都能被遠端呼叫成功
 - LiteLLM Proxy 能正確路由到 `gemma4:26b`（地端）跟
   `claude-sonnet-4-6`（雲端）兩個模型
 - 整條「本機檔案 → base64 → MCP 工具 → LLM 整理 → 結構化輸出」的鏈路沒問題
+- `SequentialAgent` 的 `output_key`／session state 傳遞正常，Step 2
+  真的有讀到 Step 1 的結果，不是自己重新擷取一次
 
-代表可以放心把 `lab1_leave_agent/`、`lab2_meeting_secretary/`、`skills/`
-這幾個資料夾（不含 `_solutions/`）發給學員了。
+代表可以放心把 `lab1_leave_agent/`、`lab2_meeting_secretary/`、
+`lab3_combo_agent/`、`skills/` 這幾個資料夾（不含 `_solutions/`）發給
+學員了。
