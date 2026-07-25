@@ -13,3 +13,4 @@ keynote/components.d.ts
 __pycache__/
 *.pyc
 .venv/
+.adk/
