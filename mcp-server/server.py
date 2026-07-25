@@ -18,7 +18,14 @@ from mcp.server.fastmcp import FastMCP
 from pdf2image import convert_from_bytes
 from PIL import Image
 
-mcp = FastMCP(name="workshop-tools")
+# host/port/streamable_http_path 要在建構子傳（**settings），FastMCP.run()
+# 本身不吃這幾個參數 -- 這幾個剛好也是預設值，寫出來只是為了明確、不依賴預設
+mcp = FastMCP(
+    name="workshop-tools",
+    host="0.0.0.0",
+    port=8000,
+    streamable_http_path="/mcp",
+)
 
 
 @mcp.tool()
@@ -66,4 +73,4 @@ def ocr_image(file_base64: str, filename: str = "image.png") -> str:
 
 
 if __name__ == "__main__":
-    mcp.run(transport="streamable-http", host="0.0.0.0", port=8000, path="/mcp")
+    mcp.run(transport="streamable-http")
