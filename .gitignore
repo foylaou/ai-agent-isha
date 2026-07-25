@@ -5,7 +5,11 @@ dist/
 *.local
 .env
 .env.*
+!.env.example
 keynote/dist/
 keynote/.slidev/
 keynote/components.d.ts
 .claude/settings.local.json
+__pycache__/
+*.pyc
+.venv/
