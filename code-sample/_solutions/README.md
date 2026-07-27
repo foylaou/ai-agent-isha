@@ -56,3 +56,10 @@ Step 1 跑完會自動接著跑 Step 2，Step 2 應該會反問交接窗口、�
 代表可以放心把 `lab1_leave_agent/`、`lab2_meeting_secretary/`、
 `lab3_combo_agent/`、`skills/` 這幾個資料夾（不含 `_solutions/`）發給
 學員了。
+
+## 想多測邊界情況
+
+每個 lab 的 README 都有「更多測試情境」，包含缺欄位、缺時間地點這類
+邊界案例，值得也用 `_solutions/` 跑一次，確認「該反問的時候有反問、
+該留 null 的時候沒亂編」這件事本身沒問題，不是學員的 instruction 沒
+寫好。

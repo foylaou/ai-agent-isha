@@ -17,9 +17,32 @@ pipeline——請假單擷取完，自動生成一份交接會議通知。對應
 ## 你要做的事
 
 `agent.py` 裡 `MEETING_STEP_INSTRUCTION` 只有一行 TODO。打開你的 AI
-編輯器，把 `../skills/leave-to-meeting-combo.SKILL.md` 整份餵給它，
-請它照著規格幫你把這段 instruction 補完——重點是要教會 Step 2「怎麼讀
-`{leave_info}` 這個從 Step 1 傳過來的變數」，而不是重新擷取一次請假單。
+編輯器，把下面這段 prompt 複製貼給它：
+
+```
+請幫我完成 lab3_combo_agent/agent.py 裡 meeting_step 的
+MEETING_STEP_INSTRUCTION。
+
+規格請看 skills/leave-to-meeting-combo.SKILL.md，裡面有完整的
+Instructions、輸出格式、Examples，照著那份規格補完。
+
+重點：
+- Step 1（leave_step）已經把請假單擷取結果存進 session state 的
+  leave_info，Step 2 要直接讀 {leave_info}，不要重新呼叫
+  ocr_image／read_document 再擷取一次
+- 交接窗口、會議時間地點這些 {leave_info} 沒有的資訊要反問使用者，
+  不可以自己編造
+
+要求：
+- 只修改 MEETING_STEP_INSTRUCTION 這個變數的內容，不要動 leave_step
+  或其他程式碼
+- instruction 裡除了 {leave_info}（這個是真的要讀 state），不要用
+  花括號 {像這樣} 當示意用的空格——ADK 會把 instruction 裡任何
+  {word} 當成必須存在的 session state 變數去查，查不到會直接丟
+  KeyError 讓 Agent 掛掉。範例格式裡要留空格請用 <角括號>
+- 完成後跑 python3 -m py_compile lab3_combo_agent/agent.py 確認語法
+  沒問題
+```
 
 ## 設定與執行
 
